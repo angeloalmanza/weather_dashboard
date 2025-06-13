@@ -387,7 +387,7 @@ const DashboardPage = () => {
             <div className="row my-4">
                 <div className="col">
                     <h4>📅 Previsioni Giornaliere</h4>
-                    {Object.entries(groupByDate(forecastData)).slice(0, 3).map(([date, items], index) => {
+                    {Object.entries(groupByDate(forecastData)).slice(1, 4).map(([date, items], index) => {
                         const temps = items.map(i => i.main.temp);
                         const min = Math.min(...temps);
                         const max = Math.max(...temps);
