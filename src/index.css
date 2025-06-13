@@ -1,24 +1,125 @@
+/* Reset base */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+/* Utility */
 .min-height {
     min-height: 100vh;
 }
 
-.spinner {
-    width: 3rem;
-    height: 3rem;
+/* Hero Section */
+.hero-card {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
 }
 
-.big-circle {
-    width: 60px;
-    height: 60px;
+.current-temp {
+    font-size: 4rem;
+    font-weight: 300;
+    line-height: 1;
 }
 
-.small-circle {
-    width: 50px;
-    height: 50px;
+.temp-range {
+    font-size: 1.1rem;
+}
+
+.weather-icon {
+    filter: drop-shadow(0 0 10px rgba(255,255,255,0.3));
+}
+
+/* Quick Stats */
+.quick-stat .stat-icon {
+    font-size: 1.5rem;
+}
+
+.quick-stat .stat-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.quick-stat .stat-value {
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+/* Forecast Scroll */
+.forecast-scroll {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+}
+
+.forecast-hour-item {
+    flex: 0 0 auto;
+    text-align: center;
+    min-width: 80px;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    background: #f8f9fa;
+}
+
+.forecast-time {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.forecast-temp {
+    font-weight: 600;
+    margin: 0.25rem 0;
+}
+
+.forecast-humidity {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+/* Daily Forecast */
+.daily-forecast-item {
+    border-radius: 0.5rem;
+}
+
+/* Sun Times */
+.sun-time .sun-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.sun-label {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin-bottom: 0.25rem;
+}
+
+.sun-value {
+    font-weight: 600;
+}
+
+/* Detail Grid */
+.detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+}
+
+.detail-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.detail-value {
+    font-weight: 600;
+    font-size: 0.9rem;
 }

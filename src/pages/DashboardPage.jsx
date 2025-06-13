@@ -50,25 +50,12 @@ const DashboardPage = () => {
     const formatSpeed = (speed) => speed ? `${Math.round(speed * 3.6)} km/h` : 'N/A';
     const capitalizeFirst = (str) => str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
 
-    const getTempClass = (temp) => {
-        if (temp >= 25) return 'text-danger';
-        if (temp >= 15) return 'text-warning';
-        if (temp >= 5) return 'text-info';
-        return 'text-secondary';
-    };
-
-    const getTempBgClass = (temp) => {
-        if (temp >= 25) return 'bg-danger';
-        if (temp >= 15) return 'bg-warning';
-        if (temp >= 5) return 'bg-info';
-        return 'bg-secondary';
-    };
-
     // Helper per raggruppare le previsioni per data
     const groupByDate = (list) => {
         const map = {};
         list.forEach(item => {
-            const date = new Date(item.dt * 1000).toLocaleDateString('it-IT');
+            const dt = new Date(item.dt * 1000);
+            const date = dt.toISOString().split('T')[0];
             if (!map[date]) map[date] = [];
             map[date].push(item);
         });
@@ -157,262 +144,251 @@ const DashboardPage = () => {
                 loading={loading}
             />
 
-            {/* Cards principali */}
-            <div className="row g-4 mb-4">
-                {/* Temperatura Principale */}
-                <div className="col-lg-3 col-md-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-body text-center">
-                            <div className={`rounded-circle d-inline-flex align-items-center justify-content-center mb-3 big-circle ${getTempBgClass(dataCity.main.temp)}`}>
-                                <span>🌡️</span>
-                            </div>
-                            <h6 className="card-subtitle mb-2 text-muted">Temperatura</h6>
-                            <h2 className={`card-title ${getTempClass(dataCity.main.temp)} mb-2`}>
-                                {formatTemp(dataCity.main.temp)}
-                            </h2>
-                            <small className="text-muted">
-                                Percepita {formatTemp(dataCity.main.feels_like)}
-                            </small>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Min/Max */}
-                <div className="col-lg-3 col-md-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-body">
-                            <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center me-3 small-circle">
-                                    <span>⬅️</span>
-                                </div>
-                                <h6 className="card-subtitle mb-0 text-muted">Min / Max</h6>
-                            </div>
-                            <div className="d-flex justify-content-between">
-                                <div className="text-center">
-                                    <small className="text-info d-block">Minima</small>
-                                    <strong className="text-info">{formatTemp(dataCity.main.temp_min)}</strong>
-                                </div>
-                                <div className="text-center">
-                                    <small className="text-danger d-block">Massima</small>
-                                    <strong className="text-danger">{formatTemp(dataCity.main.temp_max)}</strong>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Umidità */}
-                <div className="col-lg-3 col-md-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-body">
-                            <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-info d-inline-flex align-items-center justify-content-center me-3 small-circle">
-                                    <span>💧</span>
-                                </div>
-                                <h6 className="card-subtitle mb-0 text-muted">Umidità</h6>
-                            </div>
-                            <h3 className="text-info mb-2">{dataCity.main.humidity}%</h3>
-                            <div className="progress" style={{ height: '8px' }}>
-                                <div
-                                    className="progress-bar bg-info"
-                                    role="progressbar"
-                                    style={{ width: `${dataCity.main.humidity}%` }}
-                                ></div>
-                            </div>
-                            <small className="text-muted">
-                                {dataCity.main.humidity > 70 ? 'Alta' :
-                                    dataCity.main.humidity > 40 ? 'Normale' : 'Bassa'}
-                            </small>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Vento */}
-                <div className="col-lg-3 col-md-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-body">
-                            <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-success d-inline-flex align-items-center justify-content-center me-3 small-circle">
-                                    <span>💨</span>
-                                </div>
-                                <h6 className="card-subtitle mb-0 text-muted">Vento</h6>
-                            </div>
-                            <h3 className="text-success mb-2">{formatSpeed(dataCity.wind.speed)}</h3>
-                            <small className="text-muted">
-                                Direzione: {dataCity.wind?.deg ? `${dataCity.wind.deg}°` : 'N/A'}
-                            </small>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Condizioni attuali */}
+            {/* 🎯 HERO SECTION - Informazioni principali a colpo d'occhio */}
             <div className="row mb-4">
                 <div className="col">
-                    <div className="card shadow-sm border-0">
-                        <div className="card-header bg-primary text-white">
-                            <h5 className="card-title mb-0">
-                                Condizioni Attuali
-                            </h5>
+                    <div className="card border-0 shadow-lg bg-primary text-white hero-card">
+                        <div className="card-body text-center py-5">
+                            <div className="row align-items-center">
+                                <div className="col-md-6">
+                                    {/* Temperatura principale */}
+                                    <div className="temperature-display">
+                                        <span className="current-temp">{formatTemp(dataCity.main.temp)}</span>
+                                        <div className="temp-range mt-2">
+                                            <small>
+                                                ⬇️ {formatTemp(dataCity.main.temp_min)} •
+                                                ⬆️ {formatTemp(dataCity.main.temp_max)}
+                                            </small>
+                                        </div>
+                                        <div className="feels-like mt-1">
+                                            <small>Percepita {formatTemp(dataCity.main.feels_like)}</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-md-6">
+                                    {/* Condizione meteo con icona */}
+                                    <div className="weather-condition">
+                                        <img
+                                            src={`https://openweathermap.org/img/wn/${dataCity.weather[0].icon}@4x.png`}
+                                            alt={dataCity.weather[0].description}
+                                            className="weather-icon"
+                                            style={{ width: '120px', height: '120px' }}
+                                        />
+                                        <h4 className="mt-2 mb-0">
+                                            {capitalizeFirst(dataCity.weather[0].description)}
+                                        </h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 💨 DETTAGLI RAPIDI - Quick facts in 4 colonne */}
+            <div className="row g-3 mb-4">
+                <div className="col-6 col-md-3">
+                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                        <div className="card-body text-center py-3">
+                            <div className="stat-icon mb-2">💧</div>
+                            <div className="stat-label">Umidità</div>
+                            <div className="stat-value">{dataCity.main.humidity}%</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6 col-md-3">
+                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                        <div className="card-body text-center py-3">
+                            <div className="stat-icon mb-2">💨</div>
+                            <div className="stat-label">Vento</div>
+                            <div className="stat-value">{formatSpeed(dataCity.wind.speed)}</div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6 col-md-3">
+                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                        <div className="card-body text-center py-3">
+                            <div className="stat-icon mb-2">👁️</div>
+                            <div className="stat-label">Visibilità</div>
+                            <div className="stat-value">
+                                {dataCity.visibility ? `${(dataCity.visibility / 1000).toFixed(1)} km` : 'N/A'}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-6 col-md-3">
+                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                        <div className="card-body text-center py-3">
+                            <div className="stat-icon mb-2">📊</div>
+                            <div className="stat-label">Pressione</div>
+                            <div className="stat-value">{dataCity.main.pressure} hPa</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 📅 PREVISIONI ORARIE - Priorità alta */}
+            <div className="row mb-4">
+                <div className="col">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-header bg-light">
+                            <h5 className="card-title mb-0">⏰ Prossime 24 Ore</h5>
+                        </div>
+                        <div className="card-body p-3">
+                            <div className="forecast-scroll">
+                                {forecastData.slice(0, 8).map((item, index) => (
+                                    <div key={index} className="forecast-hour-item">
+                                        <div className="forecast-time">
+                                            {new Date(item.dt * 1000).toLocaleTimeString('it-IT', {
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}
+                                        </div>
+                                        <img
+                                            src={`https://openweathermap.org/img/wn/${item.weather[0].icon}.png`}
+                                            alt={item.weather[0].description}
+                                            className="forecast-icon"
+                                        />
+                                        <div className="forecast-temp">
+                                            {Math.round(item.main.temp)}°C
+                                        </div>
+                                        <div className="forecast-humidity">
+                                            💧 {item.main.humidity}%
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 📅 PREVISIONI GIORNALIERE - Pianificazione settimanale */}
+            <div className="row mb-4">
+                <div className="col">
+                    <div className="card border-0 shadow-sm">
+                        <div className="card-header bg-light">
+                            <h5 className="card-title mb-0">📅 Prossimi Giorni</h5>
                         </div>
                         <div className="card-body">
-                            <div className="row text-center g-4">
-                                <div className="col-md-4">
-                                    <h6 className="text-muted">Tempo</h6>
-                                    <img
-                                        src={`https://openweathermap.org/img/wn/${dataCity.weather[0].icon}@2x.png`}
-                                        alt={dataCity.weather[0].description}
-                                        width={80}
-                                        height={80}
-                                    />
-                                    <span className="badge bg-primary fs-6 px-3 py-2">
-                                        {capitalizeFirst(dataCity.weather[0].description)}
+                            {Object.entries(groupByDate(forecastData)).slice(1, 4).map(([date, items], index) => {
+                                const temps = items.map(i => i.main.temp);
+                                const min = Math.min(...temps);
+                                const max = Math.max(...temps);
+                                const icon = items[0].weather[0].icon;
+                                const description = items[0].weather[0].description;
+                                const formattedDate = new Date(date).toLocaleDateString('it-IT', {
+                                    weekday: 'long',
+                                    day: 'numeric',
+                                    month: 'long',
+                                });
+
+                                return (
+                                    <div key={index} className="daily-forecast-item">
+                                        <div className="row align-items-center py-2">
+                                            <div className="col-3">
+                                                <strong>{formattedDate}</strong>
+                                            </div>
+                                            <div className="col-3 text-center">
+                                                <img
+                                                    src={`https://openweathermap.org/img/wn/${icon}.png`}
+                                                    alt={description}
+                                                    width="40"
+                                                />
+                                            </div>
+                                            <div className="col-3 text-center">
+                                                <span className="fw-bold">{Math.round(max)}°</span>
+                                                <span className="text-muted ms-2">{Math.round(min)}°</span>
+                                            </div>
+                                            <div className="col-3 text-end">
+                                                <small className="text-muted">{description}</small>
+                                            </div>
+                                        </div>
+                                        {index < 2 && <hr className="my-1" />}
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {/* 🌅 DETTAGLI SECONDARI - Solo se interessato */}
+            <div className="row g-4 mb-4">
+                <div className="col-lg-6">
+                    <div className="card h-100 border-0 shadow-sm">
+                        <div className="card-header bg-light">
+                            <h6 className="card-title mb-0">🌅 Sole</h6>
+                        </div>
+                        <div className="card-body">
+                            <div className="row text-center">
+                                <div className="col-6">
+                                    <div className="sun-time">
+                                        <div className="sun-icon">🌅</div>
+                                        <div className="sun-label">Alba</div>
+                                        <div className="sun-value">
+                                            {dataCity.sys?.sunrise ?
+                                                new Date(dataCity.sys.sunrise * 1000).toLocaleTimeString('it-IT', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                }) : 'N/A'}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="col-6">
+                                    <div className="sun-time">
+                                        <div className="sun-icon">🌄</div>
+                                        <div className="sun-label">Tramonto</div>
+                                        <div className="sun-value">
+                                            {dataCity.sys?.sunset ?
+                                                new Date(dataCity.sys.sunset * 1000).toLocaleTimeString('it-IT', {
+                                                    hour: '2-digit',
+                                                    minute: '2-digit'
+                                                }) : 'N/A'}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-lg-6">
+                    <div className="card h-100 border-0 shadow-sm">
+                        <div className="card-header bg-light">
+                            <h6 className="card-title mb-0">ℹ️ Dettagli</h6>
+                        </div>
+                        <div className="card-body">
+                            <div className="detail-grid">
+                                <div className="detail-item">
+                                    <span className="detail-label">☁️ Nuvole</span>
+                                    <span className="detail-value">{dataCity.clouds?.all || 0}%</span>
+                                </div>
+                                <div className="detail-item">
+                                    <span className="detail-label">🗺️ Coordinate</span>
+                                    <span className="detail-value">
+                                        {dataCity.coord ?
+                                            `${dataCity.coord.lat.toFixed(1)}, ${dataCity.coord.lon.toFixed(1)}` : 'N/A'}
                                     </span>
                                 </div>
-                                <div className="col-md-4">
-                                    <h6 className="text-muted">Pressione</h6>
-                                    <h4 className="mb-0">{dataCity.main.pressure} <small className="text-muted">hPa</small></h4>
+                                <div className="detail-item">
+                                    <span className="detail-label">🕐 Fuso</span>
+                                    <span className="detail-value">
+                                        UTC{dataCity.timezone >= 0 ? '+' : ''}{(dataCity.timezone / 3600).toFixed(0)}
+                                    </span>
                                 </div>
-                                <div className="col-md-4">
-                                    <h6 className="text-muted">Visibilità</h6>
-                                    <h4 className="mb-0">
-                                        {dataCity.visibility ? `${(dataCity.visibility / 1000).toFixed(1)} km` : 'N/A'}
-                                    </h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Dettagli aggiuntivi */}
-            <div className="row g-4">
-                <div className="col-lg-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-header">
-                            <h5 className="card-title mb-0">
-                                <i className="fas fa-sun me-2 text-warning"></i>
-                                Alba e Tramonto
-                            </h5>
-                        </div>
-                        <div className="card-body">
-                            <div className="row">
-                                <div className="col-6 text-center">
-                                    <span>🌅</span>
-                                    <h6>Alba</h6>
-                                    <strong>
-                                        {dataCity.sys?.sunrise ?
-                                            new Date(dataCity.sys.sunrise * 1000).toLocaleTimeString('it-IT', {
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }) : 'N/A'}
-                                    </strong>
-                                </div>
-                                <div className="col-6 text-center">
-                                    <span>🌄</span>
-                                    <h6>Tramonto</h6>
-                                    <strong>
-                                        {dataCity.sys?.sunset ?
-                                            new Date(dataCity.sys.sunset * 1000).toLocaleTimeString('it-IT', {
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            }) : 'N/A'}
-                                    </strong>
+                                <div className="detail-item">
+                                    <span className="detail-label">🏴 Paese</span>
+                                    <span className="detail-value">{dataCity.sys?.country}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-
-                <div className="col-lg-6">
-                    <div className="card h-100 shadow-sm border-0">
-                        <div className="card-header">
-                            <h5 className="card-title mb-0">
-                                <i className="fas fa-info-circle me-2 text-info"></i>
-                                Informazioni Aggiuntive
-                            </h5>
-                        </div>
-                        <div className="card-body">
-                            <ul className="list-unstyled mb-0">
-                                <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-flag me-2"></i>Paese:</span>
-                                    <strong>{dataCity.sys?.country}</strong>
-                                </li>
-                                <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-map-pin me-2"></i>Coordinate:</span>
-                                    <strong>
-                                        {dataCity.coord ?
-                                            `${dataCity.coord.lat.toFixed(2)}, ${dataCity.coord.lon.toFixed(2)}` : 'N/A'}
-                                    </strong>
-                                </li>
-                                <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-cloud me-2"></i>Nuvole:</span>
-                                    <strong>{dataCity.clouds?.all || 0}%</strong>
-                                </li>
-                                <li className="d-flex justify-content-between py-2">
-                                    <span><i className="fas fa-clock me-2"></i>Fuso Orario:</span>
-                                    <strong>UTC{dataCity.timezone >= 0 ? '+' : ''}{(dataCity.timezone / 3600).toFixed(0)}</strong>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Previsioni ogni 3 ore in 7 intervalli*/}
-            <div className="row my-4">
-                <div className="col">
-                    <h4>🌦️ Previsioni Orarie</h4>
-                    <div className="d-flex overflow-auto gap-3 py-2">
-                        {forecastData.slice(0, 7).map((item, index) => (
-                            <div key={index} className="text-center px-3 py-2 border rounded shadow-sm bg-light">
-                                <strong>{new Date(item.dt * 1000).toLocaleTimeString('it-IT', {
-                                    hour: '2-digit',
-                                    minute: '2-digit'
-                                })}</strong>
-                                <div>{Math.round(item.main.temp)}°C</div>
-                                <img
-                                    src={`https://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`}
-                                    alt={item.weather[0].description}
-                                    width={40}
-                                />
-                                <small>{item.weather[0].description}</small>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Prvisioni per i prossimi 3 giorni */}
-            <div className="row my-4">
-                <div className="col">
-                    <h4>📅 Previsioni Giornaliere</h4>
-                    {Object.entries(groupByDate(forecastData)).slice(1, 4).map(([date, items], index) => {
-                        const temps = items.map(i => i.main.temp);
-                        const min = Math.min(...temps);
-                        const max = Math.max(...temps);
-                        const icon = items[0].weather[0].icon;
-                        const description = items[0].weather[0].description;
-                        return (
-                            <div key={index} className="border rounded p-3 mb-2 bg-light shadow-sm">
-                                <strong>{date}</strong>
-                                <div>🌡️ {Math.round(min)}°C - {Math.round(max)}°C</div>
-                                <div><img
-                                    src={`https://openweathermap.org/img/wn/${icon}@2x.png`}
-                                    alt={description}
-                                    width={40}
-                                />
-                                    {items[0].weather[0].description}</div>
-                            </div>
-                        );
-                    })}
                 </div>
             </div>
 
             {/* Footer Component */}
-            <Footer
-                lastUpdate={lastUpdate}
-            />
+            <Footer lastUpdate={lastUpdate} />
         </div>
     );
 };
