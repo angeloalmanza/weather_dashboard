@@ -10,7 +10,7 @@ const DashboardPage = () => {
     const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
     const CITY_NAME = 'Lodi,IT';
 
-    const[dataCity, setDataCity] = useState({});
+    const [dataCity, setDataCity] = useState({});
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [lastUpdate, setLastUpdate] = useState(null);
@@ -97,12 +97,10 @@ const DashboardPage = () => {
                     <div className="text-center">
                         <div className="alert alert-danger" role="alert">
                             <h4 className="alert-heading">
-                                <i className="fas fa-exclamation-triangle me-2"></i>
                                 Ops! Qualcosa è andato storto
                             </h4>
                             <p className="mb-3">{error}</p>
                             <button className="btn btn-outline-danger" onClick={fetchData}>
-                                <i className="fas fa-redo me-2"></i>
                                 Riprova
                             </button>
                         </div>
@@ -113,7 +111,7 @@ const DashboardPage = () => {
         );
     }
 
-    // Controlla se abbiamo i dati
+    // Controlla se i dati sono caricati
     if (!dataCity.main) {
         return (
             <div className="container min-height">
@@ -126,7 +124,6 @@ const DashboardPage = () => {
                     <div className="text-center">
                         <h3>Nessun dato disponibile</h3>
                         <button className="btn btn-primary mt-3" onClick={fetchData}>
-                            <i className="fas fa-cloud-download-alt me-2"></i>
                             Carica dati meteo
                         </button>
                     </div>
@@ -151,9 +148,7 @@ const DashboardPage = () => {
                 <div className="col-lg-3 col-md-6">
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-body text-center">
-                            <div className={`rounded-circle d-inline-flex align-items-center justify-content-center mb-3 ${getTempBgClass(dataCity.main.temp)}`} 
-                                 style={{ width: '60px', height: '60px' }}>
-                                <i className="fas fa-thermometer-half text-white fa-2x"></i>
+                            <div className={`rounded-circle d-inline-flex align-items-center justify-content-center mb-3 big-circle ${getTempBgClass(dataCity.main.temp)}`}>
                             </div>
                             <h6 className="card-subtitle mb-2 text-muted">Temperatura</h6>
                             <h2 className={`card-title ${getTempClass(dataCity.main.temp)} mb-2`}>
@@ -171,9 +166,7 @@ const DashboardPage = () => {
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-body">
                             <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center me-3" 
-                                     style={{ width: '50px', height: '50px' }}>
-                                    <i className="fas fa-arrows-alt-v text-white"></i>
+                                <div className="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center me-3 small-circle">
                                 </div>
                                 <h6 className="card-subtitle mb-0 text-muted">Min / Max</h6>
                             </div>
@@ -196,9 +189,7 @@ const DashboardPage = () => {
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-body">
                             <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-info d-inline-flex align-items-center justify-content-center me-3" 
-                                     style={{ width: '50px', height: '50px' }}>
-                                    <i className="fas fa-tint text-white"></i>
+                                <div className="rounded-circle bg-info d-inline-flex align-items-center justify-content-center me-3 small-circle">
                                 </div>
                                 <h6 className="card-subtitle mb-0 text-muted">Umidità</h6>
                             </div>
@@ -223,9 +214,7 @@ const DashboardPage = () => {
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-body">
                             <div className="d-flex align-items-center mb-3">
-                                <div className="rounded-circle bg-success d-inline-flex align-items-center justify-content-center me-3" 
-                                     style={{ width: '50px', height: '50px' }}>
-                                    <i className="fas fa-wind text-white"></i>
+                                <div className="rounded-circle bg-success d-inline-flex align-items-center justify-content-center me-3 small-circle">
                                 </div>
                                 <h6 className="card-subtitle mb-0 text-muted">Vento</h6>
                             </div>
@@ -244,7 +233,6 @@ const DashboardPage = () => {
                     <div className="card shadow-sm border-0">
                         <div className="card-header bg-primary text-white">
                             <h5 className="card-title mb-0">
-                                <i className="fas fa-cloud-sun me-2"></i>
                                 Condizioni Attuali
                             </h5>
                         </div>
@@ -278,14 +266,12 @@ const DashboardPage = () => {
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-header">
                             <h5 className="card-title mb-0">
-                                <i className="fas fa-sun me-2 text-warning"></i>
                                 Alba e Tramonto
                             </h5>
                         </div>
                         <div className="card-body">
                             <div className="row">
                                 <div className="col-6 text-center">
-                                    <i className="fas fa-sunrise fa-2x text-warning mb-2"></i>
                                     <h6>Alba</h6>
                                     <strong>
                                         {dataCity.sys?.sunrise ? 
@@ -296,7 +282,6 @@ const DashboardPage = () => {
                                     </strong>
                                 </div>
                                 <div className="col-6 text-center">
-                                    <i className="fas fa-sunset fa-2x text-orange mb-2"></i>
                                     <h6>Tramonto</h6>
                                     <strong>
                                         {dataCity.sys?.sunset ? 
@@ -315,29 +300,28 @@ const DashboardPage = () => {
                     <div className="card h-100 shadow-sm border-0">
                         <div className="card-header">
                             <h5 className="card-title mb-0">
-                                <i className="fas fa-info-circle me-2 text-info"></i>
                                 Informazioni Aggiuntive
                             </h5>
                         </div>
                         <div className="card-body">
                             <ul className="list-unstyled mb-0">
                                 <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-flag me-2"></i>Paese:</span>
+                                    <span>Paese:</span>
                                     <strong>{dataCity.sys?.country}</strong>
                                 </li>
                                 <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-map-pin me-2"></i>Coordinate:</span>
+                                    <span>Coordinate:</span>
                                     <strong>
                                         {dataCity.coord ? 
                                             `${dataCity.coord.lat.toFixed(2)}, ${dataCity.coord.lon.toFixed(2)}` : 'N/A'}
                                     </strong>
                                 </li>
                                 <li className="d-flex justify-content-between py-2 border-bottom">
-                                    <span><i className="fas fa-cloud me-2"></i>Nuvole:</span>
+                                    <span>Nuvole:</span>
                                     <strong>{dataCity.clouds?.all || 0}%</strong>
                                 </li>
                                 <li className="d-flex justify-content-between py-2">
-                                    <span><i className="fas fa-clock me-2"></i>Fuso Orario:</span>
+                                    <span>Fuso Orario:</span>
                                     <strong>UTC{dataCity.timezone >= 0 ? '+' : ''}{(dataCity.timezone / 3600).toFixed(0)}</strong>
                                 </li>
                             </ul>

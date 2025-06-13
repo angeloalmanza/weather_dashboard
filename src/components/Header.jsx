@@ -13,11 +13,9 @@ const Header = ({
                     {/* Titolo e data */}
                     <div>
                         <h1 className="h2 mb-1">
-                            <i className="fas fa-map-marker-alt text-primary me-2"></i>
                             {cityName} - Dashboard Meteo
                         </h1>
                         <p className="text-muted mb-0">
-                            <i className="fas fa-calendar-day me-2"></i>
                             {new Date().toLocaleDateString('it-IT', { 
                                 weekday: 'long', 
                                 day: 'numeric', 
@@ -35,12 +33,10 @@ const Header = ({
                                 onClick={onRefresh}
                                 disabled={loading}
                             >
-                                <i className={`fas fa-sync-alt me-2 ${loading ? 'fa-spin' : ''}`}></i>
                                 {loading ? 'Aggiornando...' : 'Aggiorna'}
                             </button>
                         )}
                         <Link to="/settings" className="btn btn-primary">
-                            <i className="fas fa-cog me-2"></i>
                             Settings
                         </Link>
                     </div>

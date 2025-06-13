@@ -8,7 +8,6 @@ const Footer = ({ lastUpdate }) => {
                         <div className="card bg-light border-0">
                             <div className="card-body text-center py-2">
                                 <small className="text-muted">
-                                    <i className="fas fa-clock me-2"></i>
                                     Ultimo aggiornamento: {lastUpdate.toLocaleString('it-IT')}
                                 </small>
                             </div>
@@ -43,8 +42,7 @@ const Footer = ({ lastUpdate }) => {
                     <hr className="my-3" />
                     <div className="text-center">
                         <small className="text-muted">
-                            © {new Date().getFullYear()} Weather Dashboard - 
-                            <span className="ms-1">Club Magellano</span>
+                            © {new Date().getFullYear()} Weather Dashboard
                         </small>
                     </div>
                 </div>
