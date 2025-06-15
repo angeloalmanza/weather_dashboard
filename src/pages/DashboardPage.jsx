@@ -143,20 +143,20 @@ const DashboardPage = () => {
                 onRefresh={fetchData}
                 loading={loading}
             />
-
-            {/* 🎯 HERO SECTION - Informazioni principali a colpo d'occhio */}
+    
+            {/* 🎯 HERO SECTION - Informazioni principali*/}
             <div className="row mb-4">
                 <div className="col">
-                    <div className="card border-0 shadow-lg bg-primary text-white hero-card">
+                    <div className="card border-0 shadow-lg hero-card">
                         <div className="card-body text-center py-5">
                             <div className="row align-items-center">
                                 <div className="col-md-6">
                                     {/* Temperatura principale */}
-                                    <div className="temperature-display">
+                                    <div className="temperature-display text-white">
                                         <span className="current-temp">{formatTemp(dataCity.main.temp)}</span>
                                         <div className="temp-range mt-2">
                                             <small>
-                                                ⬇️ {formatTemp(dataCity.main.temp_min)} •
+                                                ⬇️ {formatTemp(dataCity.main.temp_min)} • 
                                                 ⬆️ {formatTemp(dataCity.main.temp_max)}
                                             </small>
                                         </div>
@@ -167,7 +167,7 @@ const DashboardPage = () => {
                                 </div>
                                 <div className="col-md-6">
                                     {/* Condizione meteo con icona */}
-                                    <div className="weather-condition">
+                                    <div className="weather-condition text-white">
                                         <img
                                             src={`https://openweathermap.org/img/wn/${dataCity.weather[0].icon}@4x.png`}
                                             alt={dataCity.weather[0].description}
@@ -184,29 +184,35 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* 💨 DETTAGLI RAPIDI - Quick facts in 4 colonne */}
+    
+            {/* 💨 DETTAGLI RAPIDI - Quick facts colorati */}
             <div className="row g-3 mb-4">
                 <div className="col-6 col-md-3">
-                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                    <div className="card h-100 border-0 shadow-sm quick-stat humidity-card">
                         <div className="card-body text-center py-3">
                             <div className="stat-icon mb-2">💧</div>
                             <div className="stat-label">Umidità</div>
                             <div className="stat-value">{dataCity.main.humidity}%</div>
+                            <div className="progress mt-2" style={{ height: '4px' }}>
+                                <div className="progress-bar bg-info" style={{ width: `${dataCity.main.humidity}%` }}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className="col-6 col-md-3">
-                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                    <div className="card h-100 border-0 shadow-sm quick-stat wind-card">
                         <div className="card-body text-center py-3">
                             <div className="stat-icon mb-2">💨</div>
                             <div className="stat-label">Vento</div>
                             <div className="stat-value">{formatSpeed(dataCity.wind.speed)}</div>
+                            <div className="wind-direction mt-1">
+                                🧭 {dataCity.wind?.deg ? `${dataCity.wind.deg}°` : 'N/A'}
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div className="col-6 col-md-3">
-                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                    <div className="card h-100 border-0 shadow-sm quick-stat visibility-card">
                         <div className="card-body text-center py-3">
                             <div className="stat-icon mb-2">👁️</div>
                             <div className="stat-label">Visibilità</div>
@@ -217,22 +223,23 @@ const DashboardPage = () => {
                     </div>
                 </div>
                 <div className="col-6 col-md-3">
-                    <div className="card h-100 border-0 shadow-sm quick-stat">
+                    <div className="card h-100 border-0 shadow-sm quick-stat pressure-card">
                         <div className="card-body text-center py-3">
                             <div className="stat-icon mb-2">📊</div>
                             <div className="stat-label">Pressione</div>
-                            <div className="stat-value">{dataCity.main.pressure} hPa</div>
+                            <div className="stat-value">{dataCity.main.pressure}</div>
+                            <div className="pressure-unit">hPa</div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            {/* 📅 PREVISIONI ORARIE - Priorità alta */}
+    
+            {/* 📅 PREVISIONI ORARIE - Con gradiente colorato */}
             <div className="row mb-4">
                 <div className="col">
-                    <div className="card border-0 shadow-sm">
-                        <div className="card-header bg-light">
-                            <h5 className="card-title mb-0">⏰ Prossime 24 Ore</h5>
+                    <div className="card border-0 shadow-lg forecast-hourly-card">
+                        <div className="card-header hourly-header">
+                            <h5 className="card-title mb-0 text-white">⏰ Prossime 24 Ore</h5>
                         </div>
                         <div className="card-body p-3">
                             <div className="forecast-scroll">
@@ -262,49 +269,44 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* 📅 PREVISIONI GIORNALIERE - Pianificazione settimanale */}
+    
+            {/* 📅 PREVISIONI GIORNALIERE - Con colori alternati */}
             <div className="row mb-4">
                 <div className="col">
-                    <div className="card border-0 shadow-sm">
-                        <div className="card-header bg-light">
-                            <h5 className="card-title mb-0">📅 Prossimi Giorni</h5>
+                    <div className="card border-0 shadow-lg forecast-daily-card">
+                        <div className="card-header daily-header">
+                            <h5 className="card-title mb-0 text-white">📅 Prossimi Giorni</h5>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body p-0">
                             {Object.entries(groupByDate(forecastData)).slice(1, 4).map(([date, items], index) => {
                                 const temps = items.map(i => i.main.temp);
                                 const min = Math.min(...temps);
                                 const max = Math.max(...temps);
                                 const icon = items[0].weather[0].icon;
                                 const description = items[0].weather[0].description;
-                                const formattedDate = new Date(date).toLocaleDateString('it-IT', {
-                                    weekday: 'long',
-                                    day: 'numeric',
-                                    month: 'long',
-                                });
-
+                                
                                 return (
-                                    <div key={index} className="daily-forecast-item">
-                                        <div className="row align-items-center py-2">
+                                    <div key={index} className={`daily-forecast-item ${index % 2 === 0 ? 'daily-even' : 'daily-odd'}`}>
+                                        <div className="row align-items-center py-3 px-3">
                                             <div className="col-3">
-                                                <strong>{formattedDate}</strong>
+                                                <strong className="day-name">{date}</strong>
                                             </div>
                                             <div className="col-3 text-center">
                                                 <img
                                                     src={`https://openweathermap.org/img/wn/${icon}.png`}
                                                     alt={description}
                                                     width="40"
+                                                    className="daily-icon"
                                                 />
                                             </div>
                                             <div className="col-3 text-center">
-                                                <span className="fw-bold">{Math.round(max)}°</span>
-                                                <span className="text-muted ms-2">{Math.round(min)}°</span>
+                                                <span className="temp-max">{Math.round(max)}°</span>
+                                                <span className="temp-min ms-2">{Math.round(min)}°</span>
                                             </div>
                                             <div className="col-3 text-end">
-                                                <small className="text-muted">{description}</small>
+                                                <small className="weather-desc">{description}</small>
                                             </div>
                                         </div>
-                                        {index < 2 && <hr className="my-1" />}
                                     </div>
                                 );
                             })}
@@ -312,18 +314,18 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-
-            {/* 🌅 DETTAGLI SECONDARI - Solo se interessato */}
+    
+            {/* 🌅 DETTAGLI SECONDARI - Con sfondi colorati */}
             <div className="row g-4 mb-4">
                 <div className="col-lg-6">
-                    <div className="card h-100 border-0 shadow-sm">
-                        <div className="card-header bg-light">
-                            <h6 className="card-title mb-0">🌅 Sole</h6>
+                    <div className="card h-100 border-0 shadow-lg sun-card">
+                        <div className="card-header sun-header">
+                            <h6 className="card-title mb-0 text-white">🌅 Sole</h6>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body sun-body">
                             <div className="row text-center">
                                 <div className="col-6">
-                                    <div className="sun-time">
+                                    <div className="sun-time sunrise-section">
                                         <div className="sun-icon">🌅</div>
                                         <div className="sun-label">Alba</div>
                                         <div className="sun-value">
@@ -336,7 +338,7 @@ const DashboardPage = () => {
                                     </div>
                                 </div>
                                 <div className="col-6">
-                                    <div className="sun-time">
+                                    <div className="sun-time sunset-section">
                                         <div className="sun-icon">🌄</div>
                                         <div className="sun-label">Tramonto</div>
                                         <div className="sun-value">
@@ -352,32 +354,32 @@ const DashboardPage = () => {
                         </div>
                     </div>
                 </div>
-
+    
                 <div className="col-lg-6">
-                    <div className="card h-100 border-0 shadow-sm">
-                        <div className="card-header bg-light">
-                            <h6 className="card-title mb-0">ℹ️ Dettagli</h6>
+                    <div className="card h-100 border-0 shadow-lg details-card">
+                        <div className="card-header details-header">
+                            <h6 className="card-title mb-0 text-white">ℹ️ Dettagli</h6>
                         </div>
-                        <div className="card-body">
+                        <div className="card-body details-body">
                             <div className="detail-grid">
-                                <div className="detail-item">
+                                <div className="detail-item clouds-detail">
                                     <span className="detail-label">☁️ Nuvole</span>
                                     <span className="detail-value">{dataCity.clouds?.all || 0}%</span>
                                 </div>
-                                <div className="detail-item">
+                                <div className="detail-item coords-detail">
                                     <span className="detail-label">🗺️ Coordinate</span>
                                     <span className="detail-value">
                                         {dataCity.coord ?
                                             `${dataCity.coord.lat.toFixed(1)}, ${dataCity.coord.lon.toFixed(1)}` : 'N/A'}
                                     </span>
                                 </div>
-                                <div className="detail-item">
+                                <div className="detail-item timezone-detail">
                                     <span className="detail-label">🕐 Fuso</span>
                                     <span className="detail-value">
                                         UTC{dataCity.timezone >= 0 ? '+' : ''}{(dataCity.timezone / 3600).toFixed(0)}
                                     </span>
                                 </div>
-                                <div className="detail-item">
+                                <div className="detail-item country-detail">
                                     <span className="detail-label">🏴 Paese</span>
                                     <span className="detail-value">{dataCity.sys?.country}</span>
                                 </div>
@@ -386,7 +388,7 @@ const DashboardPage = () => {
                     </div>
                 </div>
             </div>
-
+    
             {/* Footer Component */}
             <Footer lastUpdate={lastUpdate} />
         </div>
