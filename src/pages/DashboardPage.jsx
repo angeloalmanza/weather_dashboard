@@ -478,14 +478,14 @@ const DashboardPage = () => {
                 </div>
             </div>
 
-            {/* 🌅 DETTAGLI SECONDARI - Sempre visibili */}
+            {/* 🌅 DETTAGLI SECONDARI - Layout dinamico */}
             <div className="row g-4 mb-4">
                 {/* Alba/Tramonto solo per oggi */}
                 {selectedDay === 0 && (
                     <div className="col-lg-6">
                         <div className="card h-100 border-0 shadow-lg sun-card">
                             <div className="card-header sun-header">
-                                <h6 className="card-title mb-0 text-white">🌅 Sole</h6>
+                                <h6 className="card-title mb-0 text-white">🌅 Sole - Oggi</h6>
                             </div>
                             <div className="card-body sun-body">
                                 <div className="row text-center">
@@ -521,12 +521,12 @@ const DashboardPage = () => {
                     </div>
                 )}
 
-                {/* Dettagli generali - sempre visibili */}
+                {/* Dettagli completi per tutti i giorni - Layout dinamico */}
                 <div className={selectedDay === 0 ? "col-lg-6" : "col-lg-12"}>
                     <div className="card h-100 border-0 shadow-lg details-card">
                         <div className="card-header details-header">
                             <h6 className="card-title mb-0 text-white">
-                                ℹ️ Dettagli {selectedDay === 0 ? "di Oggi" : `di ${getSelectedDayLabel()}`}
+                                ℹ️ Dettagli - {getSelectedDayLabel()}
                             </h6>
                         </div>
                         <div className="card-body details-body">
@@ -553,21 +553,18 @@ const DashboardPage = () => {
                                     <span className="detail-value">{currentDisplayData.sys?.country}</span>
                                 </div>
                                 
-                                {/* Dettagli extra per giorni futuri */}
-                                {selectedDay > 0 && (
-                                    <>
-                                        <div className="detail-item">
-                                            <span className="detail-label">📅 Giorno</span>
-                                            <span className="detail-value">{getSelectedDayLabel()}</span>
-                                        </div>
-                                        <div className="detail-item">
-                                            <span className="detail-label">🌡️ Escursione</span>
-                                            <span className="detail-value">
-                                                {Math.round(currentDisplayData.main?.temp_max - currentDisplayData.main?.temp_min)}°C
-                                            </span>
-                                        </div>
-                                    </>
-                                )}
+                                {/* Dettagli aggiuntivi per tutti i giorni */}
+                                <div className="detail-item">
+                                    <span className="detail-label">📅 Giorno</span>
+                                    <span className="detail-value">{getSelectedDayLabel()}</span>
+                                </div>
+                                <div className="detail-item">
+                                    <span className="detail-label">🌡️ Escursione</span>
+                                    <span className="detail-value">
+                                        {currentDisplayData.main?.temp_max && currentDisplayData.main?.temp_min ?
+                                            `${Math.round(currentDisplayData.main.temp_max - currentDisplayData.main.temp_min)}°C` : 'N/A'}
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
